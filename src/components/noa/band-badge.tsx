@@ -28,9 +28,11 @@ const tone: Record<
 export function BandBadge({
   band,
   size = "sm",
+  className,
 }: {
   band: SeverityTier;
   size?: "sm" | "xs";
+  className?: string;
 }) {
   const t = tone[band];
   return (
@@ -39,7 +41,8 @@ export function BandBadge({
         "noa-mono inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-black/40 ring-1",
         t.ring,
         size === "xs" ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]",
-        "font-medium uppercase tracking-[0.18em]"
+        "font-medium uppercase tracking-[0.18em]",
+        className
       )}
     >
       <span className={cn("size-1.5 rounded-full", t.dot)} />

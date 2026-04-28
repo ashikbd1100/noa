@@ -11,9 +11,9 @@ import { DeepDiveTerrain } from "@/components/noa/deep-dive-terrain";
 import { FindingsFeed } from "@/components/noa/findings-feed";
 import { FlagsPanel } from "@/components/noa/flags-panel";
 import { MetricSparkCards } from "@/components/noa/metric-spark-cards";
+import { NoaTabs } from "@/components/noa/noa-tabs";
 import { PillarHeroBlock } from "@/components/noa/pillar-hero";
 import { PillarStickyHeader } from "@/components/noa/pillar-sticky-header";
-import { SectionHeader } from "@/components/noa/section-header";
 import {
   getFindings,
   getMetrics,
@@ -50,8 +50,7 @@ export default async function PillarPage({
   const findings = getFindings(id);
   const metrics = getMetrics(id);
   const flags = getPillarFlags(id);
-  const pillarIndex =
-    String(IDS.indexOf(id) + 1).padStart(2, "0");
+  const pillarIndex = String(IDS.indexOf(id) + 1).padStart(2, "0");
 
   return (
     <div>
@@ -80,50 +79,68 @@ export default async function PillarPage({
           </span>
         </div>
 
-        <div className="space-y-12">
-          <section>
-            <SectionHeader
-              index={`P${pillarIndex}`}
-              eyebrow="Pillar overview"
-              title={
-                <>
-                  {pillar.label}
-                  <span className="text-muted-foreground"> — read the case.</span>
-                </>
-              }
-              description="Score, delta, color band, and the inverse tension axis at full visual weight. This is where the analytical depth lives."
-            />
-            <div className="mt-6">
-              <PillarHeroBlock pillar={pillar} />
-            </div>
-          </section>
-
-          <section>
-            <SectionHeader
-              index="03"
-              eyebrow="Top signals"
-              title="Quantitative pulse for this pillar"
-              description="Compact metric cards with embedded micro-trends — border elevation, no drop shadows, tuned for dense dark surfaces."
-            />
-            <div className="mt-6">
-              <MetricSparkCards metrics={metrics} />
-            </div>
-          </section>
-
-          <FindingsFeed findings={findings} />
-
-          <DeepDiveTerrain
-            techDebt={pillar.techDebt}
-            scalability={pillar.scalability}
-          />
-
-          <FlagsPanel
-            flags={flags}
-            title="Pillar flags"
-            subtitle="Same three-tier structure as the executive memo — scoped to this pillar only."
-            index="07"
-          />
-        </div>
+        <NoaTabs
+          defaultValue="overview"
+          tabs={[
+            {
+              id: "overview",
+              label: "Overview",
+              index: "01",
+              content: <PillarHeroBlock pillar={pillar} />,
+            },
+            {
+              id: "signals",
+              label: "Signals",
+              index: "02",
+              trailing: (
+                <span className="noa-mono rounded-sm border border-white/10 bg-black/40 px-1.5 py-0.5 text-[9px] tabular-nums text-muted-foreground">
+                  {metrics.length}
+                </span>
+              ),
+              content: <MetricSparkCards metrics={metrics} />,
+            },
+            {
+              id: "findings",
+              label: "Findings",
+              index: "03",
+              trailing: (
+                <span className="noa-mono rounded-sm border border-white/10 bg-black/40 px-1.5 py-0.5 text-[9px] tabular-nums text-muted-foreground">
+                  {findings.length}
+                </span>
+              ),
+              content: <FindingsFeed findings={findings} />,
+            },
+            {
+              id: "deep-dive",
+              label: "Deep dive",
+              index: "04",
+              content: (
+                <DeepDiveTerrain
+                  techDebt={pillar.techDebt}
+                  scalability={pillar.scalability}
+                />
+              ),
+            },
+            {
+              id: "flags",
+              label: "Flags",
+              index: "05",
+              trailing: (
+                <span className="noa-mono rounded-sm border border-white/10 bg-black/40 px-1.5 py-0.5 text-[9px] tabular-nums text-muted-foreground">
+                  {flags.length}
+                </span>
+              ),
+              content: (
+                <FlagsPanel
+                  flags={flags}
+                  title="Pillar flags"
+                  subtitle="Same three-tier structure as the executive memo — scoped to this pillar only."
+                  index="05"
+                />
+              ),
+            },
+          ]}
+        />
       </main>
     </div>
   );
