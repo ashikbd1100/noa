@@ -2,6 +2,10 @@
 
 import { usePathname } from "next/navigation";
 import { NoaTopNav, type NavKey } from "@/components/noa/noa-top-nav";
+import {
+  PrototypeWorkflowPanel,
+  WorkflowNavCta,
+} from "@/components/noa/prototype-workflow-panel";
 import type { PillarId } from "@/lib/noa-types";
 
 function activeFromPath(pathname: string | null): NavKey {
@@ -29,8 +33,10 @@ export function NoaShell({ children }: { children: React.ReactNode }) {
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-10 noa-binary-bg"
       />
-      <NoaTopNav active={active} />
-      {children}
+      <PrototypeWorkflowPanel>
+        <NoaTopNav active={active} trailing={<WorkflowNavCta />} />
+        {children}
+      </PrototypeWorkflowPanel>
       <footer className="border-t border-white/[0.06] py-6">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6">
           <div className="flex items-center gap-2 noa-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">

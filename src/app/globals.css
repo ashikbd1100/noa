@@ -218,6 +218,36 @@
   }
 }
 
+@keyframes noa-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes noa-rail-flow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes noa-step-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.62 0.22 290 / 0.0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px oklch(0.62 0.22 290 / 0.16);
+  }
+}
+
 @layer utilities {
   /* Typography helpers */
   .noa-display {
@@ -445,6 +475,46 @@
   }
   .noa-blink {
     animation: noa-blink 1.05s step-end infinite;
+  }
+  .noa-fade-up {
+    animation: noa-fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .noa-step-rail {
+    background-image: linear-gradient(
+      90deg,
+      oklch(1 0 0 / 0.06) 0%,
+      oklch(0.62 0.22 290 / 0.45) 35%,
+      oklch(0.78 0.13 192 / 0.4) 65%,
+      oklch(1 0 0 / 0.06) 100%
+    );
+    background-size: 200% 100%;
+    animation: noa-rail-flow 9s linear infinite;
+  }
+  .noa-step-rail-vertical {
+    background-image: linear-gradient(
+      180deg,
+      oklch(1 0 0 / 0.06) 0%,
+      oklch(0.62 0.22 290 / 0.45) 35%,
+      oklch(0.78 0.13 192 / 0.4) 65%,
+      oklch(1 0 0 / 0.06) 100%
+    );
+    background-size: 100% 200%;
+    animation: noa-rail-flow 9s linear infinite;
+  }
+  .noa-step-glow {
+    animation: noa-step-glow 2.6s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .noa-fade-up,
+    .noa-step-rail,
+    .noa-step-rail-vertical,
+    .noa-step-glow,
+    .noa-motion-ambient,
+    .noa-motion-pulse,
+    .noa-ribbon-path,
+    .noa-ribbon-path-alt {
+      animation: none !important;
+    }
   }
 
   /* Severity color helpers */

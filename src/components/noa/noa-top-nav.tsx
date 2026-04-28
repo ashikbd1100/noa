@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { PillarId } from "@/lib/noa-types";
@@ -33,9 +34,12 @@ export function NoaBrandMark({ className }: { className?: string }) {
 export function NoaTopNav({
   active,
   className,
+  trailing,
 }: {
   active: NavKey;
   className?: string;
+  /** e.g. workflow CTA — rendered after pillar links, before status pill */
+  trailing?: ReactNode;
 }) {
   const items: { key: NavKey; href: string; label: string }[] = [
     { key: "summary", href: "/", label: "Summary" },
@@ -54,7 +58,7 @@ export function NoaTopNav({
       >
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-full px-2 py-1 text-foreground transition-colors hover:bg-white/[0.04]"
+          className="flex shrink-0 items-center gap-2 rounded-full px-2 py-1 text-foreground transition-colors hover:bg-white/[0.04]"
         >
           <NoaBrandMark />
           <div className="hidden flex-col leading-none sm:flex">
@@ -66,6 +70,26 @@ export function NoaTopNav({
             </span>
           </div>
         </Link>
+
+        <div className="hidden shrink-0 items-center gap-2 sm:flex">
+          <span className="h-4 w-px bg-white/10" aria-hidden />
+          <div
+            className="flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-black/45 px-2 py-0.5"
+            title="Release channel"
+          >
+            <span className="relative inline-flex size-1.5 shrink-0">
+              <span className="absolute inline-flex size-full rounded-full bg-[var(--noa-cyan)] opacity-60 noa-motion-pulse" />
+              <span className="relative inline-flex size-1.5 rounded-full bg-[var(--noa-cyan)]" />
+            </span>
+            <span className="noa-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+              Live
+            </span>
+            <span className="h-2.5 w-px bg-white/10" aria-hidden />
+            <span className="noa-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
+              v0.1
+            </span>
+          </div>
+        </div>
 
         <span className="hidden h-6 w-px bg-white/10 sm:block" />
 
@@ -96,19 +120,9 @@ export function NoaTopNav({
           })}
         </div>
 
-        <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-black/60 px-2.5 py-1 lg:flex">
-          <span className="relative inline-flex size-1.5">
-            <span className="absolute inline-flex size-full rounded-full bg-[var(--noa-cyan)] opacity-60 noa-motion-pulse" />
-            <span className="relative inline-flex size-1.5 rounded-full bg-[var(--noa-cyan)]" />
-          </span>
-          <span className="noa-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">
-            Live
-          </span>
-          <span className="h-3 w-px bg-white/10" />
-          <span className="noa-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">
-            v0.1
-          </span>
-        </div>
+        {trailing ? (
+          <div className="flex shrink-0 items-center pl-0.5">{trailing}</div>
+        ) : null}
       </nav>
     </div>
   );
