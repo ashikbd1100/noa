@@ -38,7 +38,7 @@ export function DeepDiveTerrain({
     >
       <header className="flex flex-col gap-1 border-b border-white/[0.06] px-5 py-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="noa-eyebrow">06 / Tech debt vs. scalability</p>
+          <p className="noa-eyebrow">03 / Tech debt vs. scalability</p>
           <h2 className="noa-display mt-2 text-lg font-semibold tracking-tight">
             Position, not just a score
           </h2>

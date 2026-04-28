@@ -47,7 +47,7 @@ export function FindingsFeed({ findings }: { findings: Finding[] }) {
       <header className="border-b border-white/[0.06] px-5 py-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
           <div className="min-w-0 flex-1">
-            <p className="noa-eyebrow">04 / Findings feed</p>
+            <p className="noa-eyebrow">02 / Findings feed</p>
             <h2 className="noa-display mt-2 text-lg font-semibold tracking-tight">
               Ranked by severity{" "}
               <span className="text-muted-foreground">— Red first</span>

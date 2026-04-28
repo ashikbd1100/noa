@@ -454,6 +454,18 @@ const metricsByPillar: Record<PillarId, MetricCard[]> = {
       value: "71%",
       series: [62, 64, 65, 66, 67, 68, 70, 71],
     },
+    {
+      id: "am5",
+      label: "Deprecated API consumers",
+      value: "23",
+      series: [41, 38, 35, 32, 30, 28, 26, 23],
+    },
+    {
+      id: "am6",
+      label: "Deploys / week (p50)",
+      value: "18",
+      series: [9, 10, 11, 12, 14, 15, 16, 18],
+    },
   ],
   "cloud-infra": [
     {

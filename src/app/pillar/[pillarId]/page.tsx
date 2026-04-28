@@ -10,9 +10,8 @@ import {
 import { DeepDiveTerrain } from "@/components/noa/deep-dive-terrain";
 import { FindingsFeed } from "@/components/noa/findings-feed";
 import { FlagsPanel } from "@/components/noa/flags-panel";
-import { MetricSparkCards } from "@/components/noa/metric-spark-cards";
 import { NoaTabs } from "@/components/noa/noa-tabs";
-import { PillarHeroBlock } from "@/components/noa/pillar-hero";
+import { PillarOverviewContent } from "@/components/noa/pillar-overview";
 import { PillarStickyHeader } from "@/components/noa/pillar-sticky-header";
 import {
   getFindings,
@@ -86,23 +85,23 @@ export default async function PillarPage({
               id: "overview",
               label: "Overview",
               index: "01",
-              content: <PillarHeroBlock pillar={pillar} />,
-            },
-            {
-              id: "signals",
-              label: "Signals",
-              index: "02",
               trailing: (
                 <span className="noa-mono rounded-sm border border-white/10 bg-black/40 px-1.5 py-0.5 text-[9px] tabular-nums text-muted-foreground">
-                  {metrics.length}
+                  {metrics.length} signals
                 </span>
               ),
-              content: <MetricSparkCards metrics={metrics} />,
+              content: (
+                <PillarOverviewContent
+                  pillar={pillar}
+                  metrics={metrics}
+                  findings={findings}
+                />
+              ),
             },
             {
               id: "findings",
               label: "Findings",
-              index: "03",
+              index: "02",
               trailing: (
                 <span className="noa-mono rounded-sm border border-white/10 bg-black/40 px-1.5 py-0.5 text-[9px] tabular-nums text-muted-foreground">
                   {findings.length}
@@ -113,7 +112,7 @@ export default async function PillarPage({
             {
               id: "deep-dive",
               label: "Deep dive",
-              index: "04",
+              index: "03",
               content: (
                 <DeepDiveTerrain
                   techDebt={pillar.techDebt}
@@ -124,7 +123,7 @@ export default async function PillarPage({
             {
               id: "flags",
               label: "Flags",
-              index: "05",
+              index: "04",
               trailing: (
                 <span className="noa-mono rounded-sm border border-white/10 bg-black/40 px-1.5 py-0.5 text-[9px] tabular-nums text-muted-foreground">
                   {flags.length}
@@ -135,7 +134,7 @@ export default async function PillarPage({
                   flags={flags}
                   title="Pillar flags"
                   subtitle="Same three-tier structure as the executive memo — scoped to this pillar only."
-                  index="05"
+                  index="04"
                 />
               ),
             },
