@@ -1,4 +1,5 @@
 import * as React from "react";
+import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import { cn } from "@/lib/utils";
 
 type Tone = "panel" | "panel-2" | "glass" | "glass-strong";
@@ -70,17 +71,25 @@ export function PanelHeader({
         className
       )}
     >
-      <div className="min-w-0 space-y-1.5">
-        {eyebrow ? <p className="noa-eyebrow">{eyebrow}</p> : null}
+      <div className="min-w-0 space-y-2">
+        {eyebrow ? (
+          <InlineCopyLine>
+            <p className="noa-eyebrow">{eyebrow}</p>
+          </InlineCopyLine>
+        ) : null}
         {title ? (
-          <h2 className="noa-display text-[15px] font-semibold leading-tight tracking-tight text-foreground">
-            {title}
-          </h2>
+          <InlineCopyLine>
+            <h2 className="noa-display text-[15px] font-semibold leading-tight tracking-tight text-foreground">
+              {title}
+            </h2>
+          </InlineCopyLine>
         ) : null}
         {description ? (
-          <p className="max-w-xl text-xs leading-relaxed text-muted-foreground">
-            {description}
-          </p>
+          <InlineCopyLine>
+            <p className="max-w-xl text-xs leading-relaxed text-muted-foreground">
+              {description}
+            </p>
+          </InlineCopyLine>
         ) : null}
       </div>
       {trailing ? <div className="shrink-0">{trailing}</div> : null}

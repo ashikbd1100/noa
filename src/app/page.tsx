@@ -7,6 +7,7 @@ import { NoaTabs } from "@/components/noa/noa-tabs";
 import { ScoreDelta } from "@/components/noa/score-delta";
 import { ViabilityGauge } from "@/components/noa/viability-gauge";
 import { BandBadge } from "@/components/noa/band-badge";
+import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import { Panel, PanelHeader } from "@/components/noa/panel";
 import { RibbonBackdrop } from "@/components/noa/ribbon-backdrop";
 import {
@@ -38,27 +39,39 @@ export default function ExecutiveSummaryPage() {
       {/* TOP META BAR */}
       <div className="mb-8 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <p className="noa-eyebrow flex items-center gap-2">
-            <span className="size-1 rounded-full bg-[var(--noa-cyan)] noa-motion-pulse" />
-            <span>Executive summary &amp; scorecard</span>
-          </p>
-          <h1 className="noa-display mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Verdict before{" "}
-            <span className="text-muted-foreground">the case file.</span>
-          </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Composite viability, pillar roll-ups, inverse tech-debt vs.
-            scalability tension, and a memo-style flags ledger.
-          </p>
+          <InlineCopyLine>
+            <p className="noa-eyebrow flex items-center gap-2">
+              <span className="size-1 rounded-full bg-[var(--noa-cyan)] noa-motion-pulse" />
+              <span>Executive summary &amp; scorecard</span>
+            </p>
+          </InlineCopyLine>
+          <InlineCopyLine>
+            <h1 className="noa-display mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              Verdict before{" "}
+              <span className="text-muted-foreground">the case file.</span>
+            </h1>
+          </InlineCopyLine>
+          <InlineCopyLine>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Composite viability, pillar roll-ups, inverse tech-debt vs.
+              scalability tension, and a memo-style flags ledger.
+            </p>
+          </InlineCopyLine>
         </div>
-        <div className="flex flex-col items-start gap-1.5 lg:items-end">
-          <p className="noa-eyebrow">Target</p>
-          <p className="noa-display text-base font-semibold text-foreground">
-            {TARGET_COMPANY}
-          </p>
-          <span className="noa-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            Assessment · 2026 Q2
-          </span>
+        <div className="flex flex-col items-start gap-2 lg:items-end">
+          <InlineCopyLine>
+            <p className="noa-eyebrow">Target</p>
+          </InlineCopyLine>
+          <InlineCopyLine>
+            <p className="noa-display text-base font-semibold text-foreground">
+              {TARGET_COMPANY}
+            </p>
+          </InlineCopyLine>
+          <InlineCopyLine>
+            <span className="noa-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              Assessment · 2026 Q2
+            </span>
+          </InlineCopyLine>
         </div>
       </div>
 
@@ -143,9 +156,11 @@ function OverviewPanel({
         {/* LEFT — gauge */}
         <div className="flex flex-col items-center gap-6">
           <div className="flex w-full items-center justify-between gap-2">
-            <span className="noa-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-              Composite viability · avg. of 5 pillars
-            </span>
+            <InlineCopyLine className="flex-1">
+              <span className="noa-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                Composite viability · avg. of 5 pillars
+              </span>
+            </InlineCopyLine>
             <ScoreDelta
               current={exec.overallScore}
               prior={exec.priorScore}
@@ -156,9 +171,11 @@ function OverviewPanel({
             size="lg"
             label="Overall viability"
           />
-          <p className="mx-auto max-w-md text-center text-sm leading-relaxed text-muted-foreground">
-            {exec.contextLine}
-          </p>
+          <InlineCopyLine>
+            <p className="mx-auto max-w-md text-center text-sm leading-relaxed text-muted-foreground">
+              {exec.contextLine}
+            </p>
+          </InlineCopyLine>
         </div>
 
         <span
@@ -168,15 +185,21 @@ function OverviewPanel({
 
         {/* RIGHT — macro tension + flag KPIs */}
         <div className="flex flex-col gap-6">
-          <div>
-            <p className="noa-eyebrow">Macro tension</p>
-            <h2 className="noa-display mt-2 text-lg font-semibold tracking-tight">
-              Tech debt vs. scalability
-            </h2>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              Same inverse relationship surfaced at portfolio level — a
-              secondary insight beneath the gauge.
-            </p>
+          <div className="space-y-2">
+            <InlineCopyLine>
+              <p className="noa-eyebrow">Macro tension</p>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <h2 className="noa-display text-lg font-semibold tracking-tight">
+                Tech debt vs. scalability
+              </h2>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Same inverse relationship surfaced at portfolio level — a
+                secondary insight beneath the gauge.
+              </p>
+            </InlineCopyLine>
           </div>
           <DebtScalabilityTension
             techDebt={exec.macroTechDebt}
@@ -204,15 +227,19 @@ function OverviewPanel({
           </div>
 
           <div className="rounded-sm border border-white/[0.06] bg-black/30 p-3">
-            <p className="noa-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              Reading frame
-            </p>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-foreground/85">
-              Each pillar mirrors the credit-factor card logic: metric,
-              influence on the composite, one-line descriptor, and a tension
-              axis that makes the trade-off visually intuitive before you drill
-              in.
-            </p>
+            <InlineCopyLine>
+              <p className="noa-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                Reading frame
+              </p>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <p className="mt-1.5 text-[11px] leading-relaxed text-foreground/85">
+                Each pillar mirrors the credit-factor card logic: metric,
+                influence on the composite, one-line descriptor, and a tension
+                axis that makes the trade-off visually intuitive before you drill
+                in.
+              </p>
+            </InlineCopyLine>
           </div>
         </div>
       </div>
@@ -232,7 +259,7 @@ function OverviewPanel({
               </span>
             }
           />
-          <dl className="grid grid-cols-2 divide-x divide-y divide-white/[0.05] border-t border-white/[0.05]">
+          <div className="grid grid-cols-2 divide-x divide-y divide-white/[0.05] border-t border-white/[0.05]">
             <SnapshotStat
               label="Strongest"
               primary={strongest.score}
@@ -265,7 +292,7 @@ function OverviewPanel({
               fill={(highInfl / PILLARS.length) * 100}
               tone="neutral"
             />
-          </dl>
+          </div>
         </Panel>
 
         {/* PARTNER MEMO QUEUE — actionable list */}
@@ -293,20 +320,26 @@ function OverviewPanel({
                   {String(idx + 1).padStart(2, "0")}
                 </span>
                 <TierTag tier={f.tier} />
-                <p className="flex-1 text-xs leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground/90">
-                  {f.text}
-                </p>
+                <InlineCopyLine className="min-w-0 flex-1">
+                  <p className="text-xs leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground/90">
+                    {f.text}
+                  </p>
+                </InlineCopyLine>
               </li>
             ))}
           </ol>
-          <div className="flex items-center justify-between border-t border-white/[0.05] px-5 py-3 sm:px-6">
-            <span className="noa-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              Showing {watchlist.length} of {flags.length}
-            </span>
-            <span className="noa-mono inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.16em] text-foreground/80">
-              Open ledger
-              <ArrowUpRight className="size-3" aria-hidden />
-            </span>
+          <div className="flex flex-col gap-1 border-t border-white/[0.05] px-5 py-3 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
+            <InlineCopyLine>
+              <span className="noa-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                Showing {watchlist.length} of {flags.length}
+              </span>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <span className="noa-mono inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.16em] text-foreground/80">
+                Open ledger
+                <ArrowUpRight className="size-3" aria-hidden />
+              </span>
+            </InlineCopyLine>
           </div>
         </Panel>
       </div>
@@ -336,24 +369,32 @@ function OverviewPanel({
                     "hover:bg-white/[0.02] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[var(--noa-violet)]/40"
                   )}
                 >
-                  <span className="noa-mono text-[10px] tabular-nums text-muted-foreground/70">
-                    P{String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p className="truncate text-sm font-medium text-foreground">
-                    {p.shortLabel}
-                  </p>
-                  <span className="noa-display noa-tnum text-base font-semibold tabular-nums text-foreground">
-                    {p.score}
-                    <span className="noa-mono ml-0.5 text-[10px] font-medium text-muted-foreground">
-                      /100
+                  <InlineCopyLine>
+                    <span className="noa-mono text-[10px] tabular-nums text-muted-foreground/70">
+                      P{String(i + 1).padStart(2, "0")}
                     </span>
-                  </span>
-                  <ScoreDelta
-                    current={p.score}
-                    prior={p.priorScore}
-                    compact
-                    className="shrink-0 border-white/[0.08] bg-black/30 px-1.5 py-0.5 text-[9px]"
-                  />
+                  </InlineCopyLine>
+                  <InlineCopyLine className="min-w-0">
+                    <p className="truncate text-sm font-medium text-foreground">
+                      {p.shortLabel}
+                    </p>
+                  </InlineCopyLine>
+                  <InlineCopyLine>
+                    <span className="noa-display noa-tnum text-base font-semibold tabular-nums text-foreground">
+                      {p.score}
+                      <span className="noa-mono ml-0.5 text-[10px] font-medium text-muted-foreground">
+                        /100
+                      </span>
+                    </span>
+                  </InlineCopyLine>
+                  <InlineCopyLine>
+                    <ScoreDelta
+                      current={p.score}
+                      prior={p.priorScore}
+                      compact
+                      className="shrink-0 border-white/[0.08] bg-black/30 px-1.5 py-0.5 text-[9px]"
+                    />
+                  </InlineCopyLine>
                   <div
                     className="relative h-1 overflow-hidden rounded-full bg-white/[0.06]"
                     aria-hidden
@@ -402,19 +443,21 @@ function SnapshotStat({
         : "var(--noa-cyan)";
   return (
     <div className="space-y-2 px-5 py-4 sm:px-6">
-      <dt className="flex items-center justify-between gap-2">
-        <span className="noa-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-          {label}
-        </span>
-        {band ? (
-          <span
-            className="size-1.5 rounded-full"
-            style={{ background: barColor }}
-            aria-hidden
-          />
-        ) : null}
-      </dt>
-      <dd className="space-y-2">
+      <InlineCopyLine>
+        <div className="flex items-center justify-between gap-2">
+          <span className="noa-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            {label}
+          </span>
+          {band ? (
+            <span
+              className="size-1.5 rounded-full"
+              style={{ background: barColor }}
+              aria-hidden
+            />
+          ) : null}
+        </div>
+      </InlineCopyLine>
+      <InlineCopyLine>
         <p className="flex items-baseline gap-1">
           <span className="noa-display noa-tnum text-2xl font-semibold leading-none tabular-nums text-foreground">
             {primary}
@@ -425,22 +468,24 @@ function SnapshotStat({
             </span>
           ) : null}
         </p>
+      </InlineCopyLine>
+      <InlineCopyLine>
         <p className="truncate text-[11px] leading-snug text-muted-foreground">
           {caption}
         </p>
+      </InlineCopyLine>
+      <div
+        className="relative h-0.5 overflow-hidden rounded-full bg-white/[0.05]"
+        aria-hidden
+      >
         <div
-          className="relative h-0.5 overflow-hidden rounded-full bg-white/[0.05]"
-          aria-hidden
-        >
-          <div
-            className="h-full rounded-full"
-            style={{
-              width: `${Math.max(0, Math.min(100, fill))}%`,
-              background: barColor,
-            }}
-          />
-        </div>
-      </dd>
+          className="h-full rounded-full"
+          style={{
+            width: `${Math.max(0, Math.min(100, fill))}%`,
+            background: barColor,
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -515,54 +560,68 @@ function PillarsGrid() {
               />
 
               <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="noa-eyebrow flex items-center gap-2">
-                    <span className="text-foreground/70">
-                      P{String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-white/20">/</span>
-                    <span>{p.label}</span>
-                  </p>
-                  <h3 className="noa-display mt-2 text-lg font-semibold tracking-tight text-foreground">
-                    {p.label}
-                  </h3>
+                <div className="min-w-0 flex-1 space-y-2">
+                  <InlineCopyLine>
+                    <p className="noa-eyebrow flex items-center gap-2">
+                      <span className="text-foreground/70">
+                        P{String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-white/20">/</span>
+                      <span>{p.label}</span>
+                    </p>
+                  </InlineCopyLine>
+                  <InlineCopyLine>
+                    <h3 className="noa-display text-lg font-semibold tracking-tight text-foreground">
+                      {p.label}
+                    </h3>
+                  </InlineCopyLine>
                 </div>
-                <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
+                <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
               </div>
 
-              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
-                {p.summaryLine}
-              </p>
+              <InlineCopyLine>
+                <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                  {p.summaryLine}
+                </p>
+              </InlineCopyLine>
 
               <div className="mt-5 flex items-end justify-between gap-3">
-                <div>
-                  <p className="noa-eyebrow">Score</p>
-                  <div className="mt-1 flex items-baseline gap-1">
-                    <span className="noa-display noa-tnum text-4xl font-semibold leading-none text-foreground">
-                      {p.score}
-                    </span>
-                    <span className="noa-mono text-[10px] font-medium text-muted-foreground">
-                      /100
-                    </span>
-                  </div>
+                <div className="space-y-2">
+                  <InlineCopyLine>
+                    <p className="noa-eyebrow">Score</p>
+                  </InlineCopyLine>
+                  <InlineCopyLine>
+                    <div className="mt-1 flex items-baseline gap-1">
+                      <span className="noa-display noa-tnum text-4xl font-semibold leading-none text-foreground">
+                        {p.score}
+                      </span>
+                      <span className="noa-mono text-[10px] font-medium text-muted-foreground">
+                        /100
+                      </span>
+                    </div>
+                  </InlineCopyLine>
                 </div>
                 <BandBadge band={p.colorBand} size="xs" />
               </div>
 
               <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/[0.06] pt-3">
-                <span className="noa-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                  Influence
-                </span>
-                <span
-                  className={cn(
-                    "noa-mono text-[10px] uppercase tracking-[0.18em]",
-                    p.impactWeight === "High"
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  )}
-                >
-                  {p.impactWeight}
-                </span>
+                <InlineCopyLine>
+                  <span className="noa-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Influence
+                  </span>
+                </InlineCopyLine>
+                <InlineCopyLine>
+                  <span
+                    className={cn(
+                      "noa-mono text-[10px] uppercase tracking-[0.18em]",
+                      p.impactWeight === "High"
+                        ? "text-foreground"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {p.impactWeight}
+                  </span>
+                </InlineCopyLine>
               </div>
 
               <div className="mt-4">
@@ -591,19 +650,23 @@ function FlagKpi({
 }) {
   return (
     <div className="rounded-sm border border-white/[0.06] bg-black/30 px-3 py-2.5">
-      <div className="flex items-center justify-between">
-        <span
-          className="size-1.5 rounded-full"
-          style={{ background: color, boxShadow: `0 0 10px ${color}` }}
-          aria-hidden
-        />
-        <span className="noa-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
-          {label}
-        </span>
-      </div>
-      <p className="noa-display noa-tnum mt-1.5 text-xl font-semibold text-foreground">
-        {String(count).padStart(2, "0")}
-      </p>
+      <InlineCopyLine>
+        <div className="flex items-center justify-between gap-2">
+          <span
+            className="size-1.5 rounded-full"
+            style={{ background: color, boxShadow: `0 0 10px ${color}` }}
+            aria-hidden
+          />
+          <span className="noa-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+            {label}
+          </span>
+        </div>
+      </InlineCopyLine>
+      <InlineCopyLine>
+        <p className="noa-display noa-tnum mt-1.5 text-xl font-semibold text-foreground">
+          {String(count).padStart(2, "0")}
+        </p>
+      </InlineCopyLine>
     </div>
   );
 }

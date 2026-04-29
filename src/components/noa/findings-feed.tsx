@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import { InlineSeverityBar } from "@/components/noa/inline-severity-bar";
 import { SeverityDot, severityTierGlyph } from "@/components/noa/severity-dot";
 import type { Finding, SeverityTier } from "@/lib/noa-types";
@@ -46,21 +47,29 @@ export function FindingsFeed({ findings }: { findings: Finding[] }) {
     <section className="rounded-lg border border-white/10 bg-[var(--noa-panel)]">
       <header className="border-b border-white/[0.06] px-5 py-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-          <div className="min-w-0 flex-1">
-            <p className="noa-eyebrow">02 / Findings feed</p>
-            <h2 className="noa-display mt-2 text-lg font-semibold tracking-tight">
-              Ranked by severity{" "}
-              <span className="text-muted-foreground">— Red first</span>
-            </h2>
-            <p className="mt-1 max-w-xl text-xs leading-relaxed text-muted-foreground">
-              Expand a row for what was detected, why it matters, and the
-              recommended remediation path. Source tag distinguishes
-              auto-generated from analyst-validated.
-            </p>
+          <div className="min-w-0 flex-1 space-y-2">
+            <InlineCopyLine>
+              <p className="noa-eyebrow">02 / Findings feed</p>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <h2 className="noa-display text-lg font-semibold tracking-tight">
+                Ranked by severity{" "}
+                <span className="text-muted-foreground">— Red first</span>
+              </h2>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <p className="max-w-xl text-xs leading-relaxed text-muted-foreground">
+                Expand a row for what was detected, why it matters, and the
+                recommended remediation path. Source tag distinguishes
+                auto-generated from analyst-validated.
+              </p>
+            </InlineCopyLine>
 
             {/* Severity tabs sit directly under the title (control matches the headline) */}
             <div className="mt-4">
-              <p className="noa-eyebrow mb-2">Severity</p>
+              <InlineCopyLine>
+                <p className="noa-eyebrow mb-2">Severity</p>
+              </InlineCopyLine>
               <Tabs
                 value={tier}
                 onValueChange={(v) => setTier(v as (typeof tiers)[number])}
@@ -81,7 +90,9 @@ export function FindingsFeed({ findings }: { findings: Finding[] }) {
           </div>
 
           <div className="w-full shrink-0 lg:w-72">
-            <p className="noa-eyebrow mb-2 lg:text-right">Search</p>
+            <InlineCopyLine>
+              <p className="noa-eyebrow mb-2 lg:text-right">Search</p>
+            </InlineCopyLine>
             <div className="relative">
               <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -97,7 +108,9 @@ export function FindingsFeed({ findings }: { findings: Finding[] }) {
       </header>
 
       <div className="flex flex-col gap-2 border-b border-white/[0.06] px-5 py-3">
-        <p className="noa-eyebrow">Category</p>
+        <InlineCopyLine>
+          <p className="noa-eyebrow">Category</p>
+        </InlineCopyLine>
         <div className="flex flex-wrap gap-1.5">
           {categories.map((c) => (
             <button
@@ -155,11 +168,14 @@ export function FindingsFeed({ findings }: { findings: Finding[] }) {
                         {severityTierGlyph(f.severity)}
                       </span>
 
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium leading-snug text-foreground">
-                          {f.title}
-                        </p>
-                        <div className="mt-1 flex flex-wrap items-center gap-2">
+                      <div className="min-w-0 flex-1 space-y-2">
+                        <InlineCopyLine>
+                          <p className="text-sm font-medium leading-snug text-foreground">
+                            {f.title}
+                          </p>
+                        </InlineCopyLine>
+                        <InlineCopyLine>
+                          <div className="flex flex-wrap items-center gap-2">
                           <span className="noa-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                             {f.category}
                           </span>
@@ -187,7 +203,8 @@ export function FindingsFeed({ findings }: { findings: Finding[] }) {
                               </>
                             )}
                           </span>
-                        </div>
+                          </div>
+                        </InlineCopyLine>
                       </div>
 
                       <div className="hidden shrink-0 items-center sm:flex">
@@ -225,17 +242,25 @@ export function FindingsFeed({ findings }: { findings: Finding[] }) {
                       </div>
 
                       <div className="mt-4 grid gap-5 md:grid-cols-2">
-                        <div>
-                          <p className="noa-eyebrow">What was detected</p>
-                          <p className="mt-2 text-sm leading-relaxed text-foreground/90">
-                            {f.detail}
-                          </p>
+                        <div className="space-y-2">
+                          <InlineCopyLine>
+                            <p className="noa-eyebrow">What was detected</p>
+                          </InlineCopyLine>
+                          <InlineCopyLine>
+                            <p className="text-sm leading-relaxed text-foreground/90">
+                              {f.detail}
+                            </p>
+                          </InlineCopyLine>
                         </div>
-                        <div>
-                          <p className="noa-eyebrow">Recommended action</p>
-                          <p className="mt-2 text-sm leading-relaxed text-foreground/90">
-                            {f.remediation}
-                          </p>
+                        <div className="space-y-2">
+                          <InlineCopyLine>
+                            <p className="noa-eyebrow">Recommended action</p>
+                          </InlineCopyLine>
+                          <InlineCopyLine>
+                            <p className="text-sm leading-relaxed text-foreground/90">
+                              {f.remediation}
+                            </p>
+                          </InlineCopyLine>
                         </div>
                       </div>
                     </div>

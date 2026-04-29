@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ChevronDown, Filter } from "lucide-react";
+import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import {
   Collapsible,
   CollapsibleContent,
@@ -68,14 +69,20 @@ export function FlagsPanel({
       )}
     >
       <header className="flex flex-col gap-4 border-b border-white/[0.06] px-5 py-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="noa-eyebrow">{index} / {title}</p>
-          <h2 className="noa-display mt-2 text-lg font-semibold tracking-tight">
-            Ranked, declarative, severity-first
-          </h2>
-          <p className="mt-1 max-w-xl text-xs leading-relaxed text-muted-foreground">
-            {subtitle}
-          </p>
+        <div className="min-w-0 space-y-2">
+          <InlineCopyLine>
+            <p className="noa-eyebrow">{index} / {title}</p>
+          </InlineCopyLine>
+          <InlineCopyLine>
+            <h2 className="noa-display text-lg font-semibold tracking-tight">
+              Ranked, declarative, severity-first
+            </h2>
+          </InlineCopyLine>
+          <InlineCopyLine>
+            <p className="max-w-xl text-xs leading-relaxed text-muted-foreground">
+              {subtitle}
+            </p>
+          </InlineCopyLine>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="noa-eyebrow inline-flex items-center gap-1.5">
@@ -113,18 +120,20 @@ export function FlagsPanel({
               key={tier}
               defaultOpen={tier === "red" || filter !== "all"}
             >
-              <CollapsibleTrigger className="group/flag flex h-12 w-full cursor-pointer items-center justify-between rounded-none border-0 bg-transparent px-5 text-left noa-row-hover">
-                <span className="flex items-center gap-3">
+              <CollapsibleTrigger className="group/flag flex min-h-12 w-full cursor-pointer items-center justify-between gap-2 rounded-none border-0 bg-transparent px-5 py-2 text-left noa-row-hover">
+                <span className="flex min-w-0 flex-1 items-center gap-3">
                   <span
-                    className="size-1.5 rounded-full"
+                    className="size-1.5 shrink-0 rounded-full"
                     style={{ background: t.color, boxShadow: `0 0 12px ${t.color}` }}
                     aria-hidden
                   />
-                  <span className="text-left text-[11px] font-medium leading-snug text-foreground">
-                    {t.label}
-                  </span>
+                  <InlineCopyLine className="min-w-0 flex-1">
+                    <span className="text-left text-[11px] font-medium leading-snug text-foreground">
+                      {t.label}
+                    </span>
+                  </InlineCopyLine>
                   <span
-                    className="noa-mono inline-flex items-center justify-center rounded-sm border px-1.5 py-0.5 text-[10px] tabular-nums"
+                    className="noa-mono inline-flex shrink-0 items-center justify-center rounded-sm border px-1.5 py-0.5 text-[10px] tabular-nums"
                     style={{
                       borderColor: `${t.color}55`,
                       color: t.color,
@@ -134,13 +143,17 @@ export function FlagsPanel({
                     {String(count).padStart(2, "0")}
                   </span>
                 </span>
-                <ChevronDown className="size-3.5 text-muted-foreground transition-transform group-aria-expanded/flag:rotate-180" />
+                <ChevronDown className="size-3.5 shrink-0 text-muted-foreground transition-transform group-aria-expanded/flag:rotate-180" />
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <ul className="space-y-0 px-5 pb-4 pt-0">
                   {list.length === 0 ? (
-                    <li className="text-xs text-muted-foreground">
-                      No items in this tier under current view.
+                    <li>
+                      <InlineCopyLine>
+                        <span className="text-xs text-muted-foreground">
+                          No items in this tier under current view.
+                        </span>
+                      </InlineCopyLine>
                     </li>
                   ) : (
                     list.map((f, i) => (
@@ -156,9 +169,11 @@ export function FlagsPanel({
                           style={{ background: t.color }}
                           aria-hidden
                         />
-                        <p className="text-sm leading-snug text-foreground/90">
-                          {f.text}
-                        </p>
+                        <InlineCopyLine className="min-w-0">
+                          <p className="text-sm leading-snug text-foreground/90">
+                            {f.text}
+                          </p>
+                        </InlineCopyLine>
                       </li>
                     ))
                   )}

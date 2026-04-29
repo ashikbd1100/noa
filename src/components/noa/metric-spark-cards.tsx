@@ -1,3 +1,4 @@
+import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import { Panel } from "@/components/noa/panel";
 import type { MetricCard } from "@/lib/noa-types";
 import { cn } from "@/lib/utils";
@@ -79,29 +80,35 @@ export function MetricSparkCards({
             brackets
             className="px-4 py-4 noa-row-hover"
           >
-            <div className="flex items-center justify-between">
-              <p className="noa-eyebrow">{m.label}</p>
-              <span className="noa-mono text-[9px] tabular-nums text-white/30">
-                {String(idx + 1).padStart(2, "0")}
-              </span>
-            </div>
-            <p className="noa-display noa-tnum mt-2 text-3xl font-semibold tracking-tight text-foreground">
-              {m.value}
-            </p>
-            <div className="mt-1 flex items-center gap-1.5">
-              <span
-                className={cn(
-                  "noa-mono text-[10px] tabular-nums uppercase tracking-[0.16em]",
-                  up ? "text-[var(--noa-cyan)]" : "text-muted-foreground"
-                )}
-              >
-                {up ? "+" : ""}
-                {delta}%
-              </span>
-              <span className="noa-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
-                trailing
-              </span>
-            </div>
+            <InlineCopyLine>
+              <div className="flex items-center justify-between gap-2">
+                <p className="noa-eyebrow">{m.label}</p>
+                <span className="noa-mono text-[9px] tabular-nums text-white/30">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+              </div>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <p className="noa-display noa-tnum mt-2 text-3xl font-semibold tracking-tight text-foreground">
+                {m.value}
+              </p>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <div className="mt-1 flex items-center gap-1.5">
+                <span
+                  className={cn(
+                    "noa-mono text-[10px] tabular-nums uppercase tracking-[0.16em]",
+                    up ? "text-[var(--noa-cyan)]" : "text-muted-foreground"
+                  )}
+                >
+                  {up ? "+" : ""}
+                  {delta}%
+                </span>
+                <span className="noa-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+                  trailing
+                </span>
+              </div>
+            </InlineCopyLine>
             <MiniSpark series={m.series} />
           </Panel>
         );

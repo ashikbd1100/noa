@@ -1,3 +1,4 @@
+import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import { cn } from "@/lib/utils";
 
 /**
@@ -36,17 +37,23 @@ export function DeepDiveTerrain({
         className
       )}
     >
-      <header className="flex flex-col gap-1 border-b border-white/[0.06] px-5 py-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="noa-eyebrow">03 / Tech debt vs. scalability</p>
-          <h2 className="noa-display mt-2 text-lg font-semibold tracking-tight">
-            Position, not just a score
-          </h2>
+      <header className="flex flex-col gap-3 border-b border-white/[0.06] px-5 py-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0 space-y-2">
+          <InlineCopyLine>
+            <p className="noa-eyebrow">03 / Tech debt vs. scalability</p>
+          </InlineCopyLine>
+          <InlineCopyLine>
+            <h2 className="noa-display text-lg font-semibold tracking-tight">
+              Position, not just a score
+            </h2>
+          </InlineCopyLine>
         </div>
-        <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
-          Where this target lands on the inverse-tension spectrum within this
-          pillar. Precision landscape — sculptural read (not a consumer chart).
-        </p>
+        <InlineCopyLine className="max-w-md">
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Where this target lands on the inverse-tension spectrum within this
+            pillar. Precision landscape — sculptural read (not a consumer chart).
+          </p>
+        </InlineCopyLine>
       </header>
 
       <div className="relative grid gap-6 p-5 md:grid-cols-[minmax(0,1fr)_220px] md:items-stretch">
@@ -150,40 +157,62 @@ export function DeepDiveTerrain({
         </div>
 
         <div className="flex flex-col gap-4">
-          <div>
-            <p className="noa-eyebrow">Read</p>
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              Position encodes the debt/scalability tension for this pillar — a
-              dual-axis read with quadrant scaffolding, topographic emphasis, and
-              a node cluster cue (Fortexa-inspired). Tilt the stage on hover.
-            </p>
+          <div className="space-y-2">
+            <InlineCopyLine>
+              <p className="noa-eyebrow">Read</p>
+            </InlineCopyLine>
+            <InlineCopyLine>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Position encodes the debt/scalability tension for this pillar — a
+                dual-axis read with quadrant scaffolding, topographic emphasis, and
+                a node cluster cue (Fortexa-inspired). Tilt the stage on hover.
+              </p>
+            </InlineCopyLine>
           </div>
           <div className="grid grid-cols-2 gap-3 border-t border-white/[0.06] pt-4">
-            <div>
-              <p className="noa-eyebrow">Tech debt</p>
-              <p className="noa-display noa-tnum mt-1.5 text-xl font-semibold text-foreground">
-                {x}
-              </p>
+            <div className="space-y-2">
+              <InlineCopyLine>
+                <p className="noa-eyebrow">Tech debt</p>
+              </InlineCopyLine>
+              <InlineCopyLine>
+                <p className="noa-display noa-tnum text-xl font-semibold text-foreground">
+                  {x}
+                </p>
+              </InlineCopyLine>
             </div>
-            <div>
-              <p className="noa-eyebrow">Scalability</p>
-              <p className="noa-display noa-tnum mt-1.5 text-xl font-semibold text-foreground">
-                {y}
-              </p>
+            <div className="space-y-2">
+              <InlineCopyLine>
+                <p className="noa-eyebrow">Scalability</p>
+              </InlineCopyLine>
+              <InlineCopyLine>
+                <p className="noa-display noa-tnum text-xl font-semibold text-foreground">
+                  {y}
+                </p>
+              </InlineCopyLine>
             </div>
           </div>
           <div className="rounded-sm border border-white/[0.06] bg-black/30 p-3">
-            <p className="noa-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              Quadrants
-            </p>
-            <ul className="mt-2 space-y-1.5 text-[11px] leading-snug text-foreground/85">
+            <InlineCopyLine>
+              <p className="noa-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                Quadrants
+              </p>
+            </InlineCopyLine>
+            <ul className="mt-2 space-y-2">
               <li>
-                <span className="text-white/35">QII</span> — High debt, high
-                scalability (refactor opportunity)
+                <InlineCopyLine>
+                  <span className="text-[11px] leading-snug text-foreground/85">
+                    <span className="text-white/35">QII</span> — High debt, high
+                    scalability (refactor opportunity)
+                  </span>
+                </InlineCopyLine>
               </li>
               <li>
-                <span className="text-white/35">QI</span> — High debt, low
-                scalability (risk concentration)
+                <InlineCopyLine>
+                  <span className="text-[11px] leading-snug text-foreground/85">
+                    <span className="text-white/35">QI</span> — High debt, low
+                    scalability (risk concentration)
+                  </span>
+                </InlineCopyLine>
               </li>
             </ul>
           </div>
