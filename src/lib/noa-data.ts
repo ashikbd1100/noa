@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type {
   Finding,
   FlagItem,
@@ -6,109 +7,28 @@ import type {
   PillarMeta,
 } from "./noa-types";
 import {
-  macroScalability,
-  macroTechDebt,
-  overallScore,
   severityBandFromScore,
 } from "./noa-utils";
+import { pillarSeedRows, randomizeDemoPillars } from "./noa-demo-random";
+import {
+  buildExecutiveSummary,
+  EXEC_SUMMARY_NARRATIVE,
+} from "./noa-executive-summary";
 
-const basePillars: Omit<PillarMeta, "colorBand">[] = [
-  {
-    id: "applications",
-    label: "Applications",
-    shortLabel: "Apps",
-    score: 68,
-    priorScore: 64,
-    techDebt: 52,
-    scalability: 48,
-    impactWeight: "High",
-    summaryLine:
-      "Legacy service mesh patterns limiting release velocity across core APIs.",
-    heroDescriptor:
-      "Elevated debt concentration across core services with uneven test discipline.",
-  },
-  {
-    id: "cloud-infra",
-    label: "Cloud / Infra",
-    shortLabel: "Cloud",
-    score: 61,
-    priorScore: 57,
-    techDebt: 58,
-    scalability: 42,
-    impactWeight: "High",
-    summaryLine:
-      "Multi-region footprint is strong; IaC drift and key management need consolidation.",
-    heroDescriptor:
-      "Operational maturity is mid-flight — scaling headroom exists but policy gaps remain.",
-  },
-  {
-    id: "architecture",
-    label: "Architecture",
-    shortLabel: "Arch",
-    score: 74,
-    priorScore: 70,
-    techDebt: 41,
-    scalability: 59,
-    impactWeight: "Medium",
-    summaryLine:
-      "Service boundaries are coherent; a few synchronous choke points warrant refactor.",
-    heroDescriptor:
-      "Foundational modularity is above peer median with isolated coupling hotspots.",
-  },
-  {
-    id: "security",
-    label: "Security",
-    shortLabel: "Sec",
-    score: 55,
-    priorScore: 51,
-    techDebt: 63,
-    scalability: 37,
-    impactWeight: "High",
-    summaryLine:
-      "Secrets hygiene and dependency CVE exposure are the dominant diligence themes.",
-    heroDescriptor:
-      "Material exposure in third-party supply chain; controls trajectory is improving.",
-  },
-  {
-    id: "personnel",
-    label: "Personnel",
-    shortLabel: "People",
-    score: 79,
-    priorScore: 75,
-    techDebt: 34,
-    scalability: 66,
-    impactWeight: "Low",
-    summaryLine:
-      "Engineering leadership depth is a strength; bench depth in SRE is thinner.",
-    heroDescriptor:
-      "Team topology supports scale; retention signals stable vs. market comps.",
-  },
-];
+export { EXEC_SUMMARY_NARRATIVE };
 
 export const TARGET_COMPANY = "HelioStack Analytics, Inc.";
 
-/** Narrative only; scores derived from `PILLARS` (brief: composite = average of 5 pillar scores). */
-export const EXEC_SUMMARY_NARRATIVE = {
-  contextLine:
-    "Strong architectural foundation with moderate debt exposure concentrated in delivery paths.",
-} as const;
-
-export const PILLARS: PillarMeta[] = basePillars.map((p) => ({
+export const PILLARS: PillarMeta[] = pillarSeedRows.map((p) => ({
   ...p,
   colorBand: severityBandFromScore(p.score),
 }));
 
-export function getExecutiveSummary() {
-  const priorComposite = Math.round(
-    PILLARS.reduce((a, p) => a + p.priorScore, 0) / PILLARS.length
-  );
-  return {
-    ...EXEC_SUMMARY_NARRATIVE,
-    overallScore: overallScore(PILLARS),
-    priorScore: priorComposite,
-    macroTechDebt: macroTechDebt(PILLARS),
-    macroScalability: macroScalability(PILLARS),
-  };
+/** One randomized pillar snapshot per React server request (shared by pages that import it). */
+export const getDemoPillarsForRequest = cache(randomizeDemoPillars);
+
+export function getExecutiveSummary(pillars: PillarMeta[] = PILLARS) {
+  return buildExecutiveSummary(pillars);
 }
 
 export function getPillar(id: PillarId): PillarMeta | undefined {

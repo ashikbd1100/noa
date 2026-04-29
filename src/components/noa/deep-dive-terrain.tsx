@@ -1,5 +1,18 @@
+"use client";
+
+import { useCallback, useRef, useState } from "react";
+
+import { useAnimatedNumberFloat } from "@/components/noa/noa-demo-motion";
 import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import { cn } from "@/lib/utils";
+
+const DEFAULT_RX = 50;
+const DEFAULT_RY = 0;
+const DEFAULT_RZ = -2.5;
+const SCALE = 0.92;
+const DRAG_SENS = 0.32;
+const RX_MIN = 22;
+const RX_MAX = 78;
 
 /**
  * Tech-debt vs. scalability deep dive — quadrant + topographic terrain.
@@ -17,6 +30,8 @@ export function DeepDiveTerrain({
 }) {
   const x = Math.min(100, Math.max(0, techDebt));
   const y = Math.min(100, Math.max(0, scalability));
+  const ax = useAnimatedNumberFloat(x);
+  const ay = useAnimatedNumberFloat(y);
 
   const curvePts = Array.from({ length: 20 }, (_, i) => {
     const t = i / 19;
@@ -26,9 +41,58 @@ export function DeepDiveTerrain({
   }).join(" ");
 
   const pos = {
-    left: `${x}%`,
-    bottom: `${y}%`,
+    left: `${ax}%`,
+    bottom: `${ay}%`,
   };
+
+  const [rx, setRx] = useState(DEFAULT_RX);
+  const [ry, setRy] = useState(DEFAULT_RY);
+  const draggingRef = useRef(false);
+  const lastRef = useRef({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    draggingRef.current = true;
+    setDragging(true);
+    lastRef.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }, []);
+
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return;
+    const dx = e.clientX - lastRef.current.x;
+    const dy = e.clientY - lastRef.current.y;
+    lastRef.current = { x: e.clientX, y: e.clientY };
+    setRy((prev) => prev + dx * DRAG_SENS);
+    setRx((prev) =>
+      Math.min(RX_MAX, Math.max(RX_MIN, prev - dy * DRAG_SENS))
+    );
+  }, []);
+
+  const endDrag = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    setDragging(false);
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* released */
+    }
+  }, []);
+
+  const onLostCapture = useCallback(() => {
+    draggingRef.current = false;
+    setDragging(false);
+  }, []);
+
+  const resetRotation = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setRx(DEFAULT_RX);
+    setRy(DEFAULT_RY);
+  }, []);
+
+  const transformStyle = `rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${DEFAULT_RZ}deg) scale(${SCALE})`;
 
   return (
     <section
@@ -57,12 +121,29 @@ export function DeepDiveTerrain({
       </header>
 
       <div className="relative grid gap-6 p-5 md:grid-cols-[minmax(0,1fr)_220px] md:items-stretch">
-        {/* 3D terrain stage — brief: terrain-style / structural model */}
+        {/* 3D terrain stage — drag to orbit; double-click stage to reset */}
         <div
           className="relative flex items-center justify-center py-6 md:py-8"
           style={{ perspective: "1100px" }}
         >
-          <div className="relative w-full origin-center [transform-style:preserve-3d] transition-transform duration-700 ease-out [transform:rotateX(50deg)_rotateZ(-2.5deg)_scale(0.92)] hover:[transform:rotateX(56deg)_rotateZ(-3deg)_scale(0.9)]">
+          <div
+            role="application"
+            aria-label="Terrain chart in 3D. Drag to rotate. Double-click to reset."
+            tabIndex={0}
+            className={cn(
+              "relative w-full origin-center touch-none select-none [transform-style:preserve-3d]",
+              "cursor-grab outline-none focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--noa-panel)]",
+              dragging && "cursor-grabbing",
+              !dragging && "transition-transform duration-700 ease-out"
+            )}
+            style={{ transform: transformStyle }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            onLostPointerCapture={onLostCapture}
+            onDoubleClick={resetRotation}
+          >
             {/* Ridge layers (depth) */}
             <div
               className="pointer-events-none absolute inset-[12%] rounded-md border border-white/[0.07] bg-black/20"
@@ -148,9 +229,10 @@ export function DeepDiveTerrain({
                 </div>
               </div>
 
-              <div className="absolute bottom-3 right-3 noa-mono rounded-sm border border-white/10 bg-black/70 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                Position · <span className="noa-tnum text-foreground">{x}</span> /
-                <span className="noa-tnum text-foreground"> {y}</span>
+              <div className="pointer-events-none absolute bottom-3 right-3 noa-mono rounded-sm border border-white/10 bg-black/70 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                Position ·{" "}
+                <span className="noa-tnum text-foreground">{Math.round(ax)}</span> /
+                <span className="noa-tnum text-foreground"> {Math.round(ay)}</span>
               </div>
             </div>
           </div>
@@ -165,7 +247,8 @@ export function DeepDiveTerrain({
               <p className="text-xs leading-relaxed text-muted-foreground">
                 Position encodes the debt/scalability tension for this pillar — a
                 dual-axis read with quadrant scaffolding, topographic emphasis, and
-                a node cluster cue (Fortexa-inspired). Tilt the stage on hover.
+                a node cluster cue (Fortexa-inspired). Drag to orbit the stage;
+                double-click to reset.
               </p>
             </InlineCopyLine>
           </div>
@@ -176,7 +259,7 @@ export function DeepDiveTerrain({
               </InlineCopyLine>
               <InlineCopyLine>
                 <p className="noa-display noa-tnum text-xl font-semibold text-foreground">
-                  {x}
+                  {Math.round(ax)}
                 </p>
               </InlineCopyLine>
             </div>
@@ -186,7 +269,7 @@ export function DeepDiveTerrain({
               </InlineCopyLine>
               <InlineCopyLine>
                 <p className="noa-display noa-tnum text-xl font-semibold text-foreground">
-                  {y}
+                  {Math.round(ay)}
                 </p>
               </InlineCopyLine>
             </div>

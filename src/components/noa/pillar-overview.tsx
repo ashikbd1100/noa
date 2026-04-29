@@ -1,23 +1,28 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { AnimatedDigits } from "@/components/noa/noa-demo-motion";
 import { InlineCopyLine } from "@/components/noa/inline-copy-line";
 import { MetricSparkCards } from "@/components/noa/metric-spark-cards";
 import { Panel } from "@/components/noa/panel";
 import { PillarHeroBlock } from "@/components/noa/pillar-hero";
-import type { Finding, MetricCard, PillarMeta } from "@/lib/noa-types";
+import type {
+  MetricCard,
+  PillarMeta,
+  SeveritySnap,
+} from "@/lib/noa-types";
 import { cn } from "@/lib/utils";
 
 export function PillarOverviewContent({
   pillar,
   metrics,
-  findings,
+  severitySnap,
 }: {
   pillar: PillarMeta;
   metrics: MetricCard[];
-  findings: Finding[];
+  severitySnap: SeveritySnap;
 }) {
-  const red = findings.filter((f) => f.severity === "red").length;
-  const yellow = findings.filter((f) => f.severity === "yellow").length;
-  const green = findings.filter((f) => f.severity === "green").length;
-  const analyst = findings.filter((f) => f.source === "analyst").length;
+  const { red, yellow, green, analyst } = severitySnap;
 
   return (
     <div className="space-y-8">
@@ -36,15 +41,31 @@ export function PillarOverviewContent({
           </InlineCopyLine>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <SnapshotTile label="Total findings" value={String(findings.length)} />
-          <SnapshotTile label="Red-tier" value={String(red)} accent="red" />
-          <SnapshotTile label="Yellow-tier" value={String(yellow)} accent="yellow" />
-          <SnapshotTile label="Analyst-validated" value={String(analyst)} />
+          <SnapshotTile
+            label="Total findings"
+            value={<AnimatedDigits value={severitySnap.total} />}
+          />
+          <SnapshotTile
+            label="Red-tier"
+            value={<AnimatedDigits value={red} />}
+            accent="red"
+          />
+          <SnapshotTile
+            label="Yellow-tier"
+            value={<AnimatedDigits value={yellow} />}
+            accent="yellow"
+          />
+          <SnapshotTile
+            label="Analyst-validated"
+            value={<AnimatedDigits value={analyst} />}
+          />
         </div>
         <InlineCopyLine>
           <p className="noa-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
             Green-tier in feed:{" "}
-            <span className="text-foreground/90 tabular-nums">{green}</span>
+            <span className="text-foreground/90 tabular-nums">
+              <AnimatedDigits value={green} />
+            </span>
           </p>
         </InlineCopyLine>
       </section>
@@ -72,7 +93,7 @@ function SnapshotTile({
   accent,
 }: {
   label: string;
-  value: string;
+  value: ReactNode;
   accent?: "red" | "yellow";
 }) {
   return (

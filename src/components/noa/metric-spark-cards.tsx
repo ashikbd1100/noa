@@ -1,5 +1,9 @@
+"use client";
+
 import { InlineCopyLine } from "@/components/noa/inline-copy-line";
+import { useAnimatedNumberFloat } from "@/components/noa/noa-demo-motion";
 import { Panel } from "@/components/noa/panel";
+import { formatMetricDisplay, parseMetricDisplay } from "@/lib/noa-demo-random";
 import type { MetricCard } from "@/lib/noa-types";
 import { cn } from "@/lib/utils";
 
@@ -53,6 +57,12 @@ function MiniSpark({ series }: { series: number[] }) {
   );
 }
 
+function AnimatedMetricHeadline({ value }: { value: string }) {
+  const target = parseMetricDisplay(value);
+  const anim = useAnimatedNumberFloat(target);
+  return <>{formatMetricDisplay(value, anim)}</>;
+}
+
 function trendDelta(series: number[]) {
   if (series.length < 2) return 0;
   const first = series[0];
@@ -90,7 +100,7 @@ export function MetricSparkCards({
             </InlineCopyLine>
             <InlineCopyLine>
               <p className="noa-display noa-tnum mt-2 text-3xl font-semibold tracking-tight text-foreground">
-                {m.value}
+                <AnimatedMetricHeadline value={m.value} />
               </p>
             </InlineCopyLine>
             <InlineCopyLine>

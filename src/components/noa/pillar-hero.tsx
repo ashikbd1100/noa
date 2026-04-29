@@ -1,3 +1,5 @@
+"use client";
+
 import { ViabilityGauge } from "@/components/noa/viability-gauge";
 import { DebtScalabilityTension } from "@/components/noa/debt-scalability-tension";
 import { BandBadge } from "@/components/noa/band-badge";
@@ -5,9 +7,15 @@ import { ScoreDelta } from "@/components/noa/score-delta";
 import { PillarVolumetricMark } from "@/components/noa/pillar-volumetric-mark";
 import { RibbonBackdrop } from "@/components/noa/ribbon-backdrop";
 import { InlineCopyLine } from "@/components/noa/inline-copy-line";
+import { useAnimatedNumber } from "@/components/noa/noa-demo-motion";
 import type { PillarMeta } from "@/lib/noa-types";
 
 export function PillarHeroBlock({ pillar }: { pillar: PillarMeta }) {
+  const animScore = useAnimatedNumber(pillar.score);
+  const animPrior = useAnimatedNumber(pillar.priorScore);
+  const animDebt = useAnimatedNumber(pillar.techDebt);
+  const animScale = useAnimatedNumber(pillar.scalability);
+
   return (
     <section className="relative overflow-hidden rounded-lg border border-white/10 noa-glass-strong noa-ambient-glow">
       <RibbonBackdrop />
@@ -43,7 +51,7 @@ export function PillarHeroBlock({ pillar }: { pillar: PillarMeta }) {
                 </div>
               </InlineCopyLine>
               <InlineCopyLine>
-                <ScoreDelta current={pillar.score} prior={pillar.priorScore} />
+                <ScoreDelta current={animScore} prior={animPrior} />
               </InlineCopyLine>
             </div>
           </div>
@@ -56,8 +64,8 @@ export function PillarHeroBlock({ pillar }: { pillar: PillarMeta }) {
 
           <div className="grid grid-cols-3 gap-3 border-t border-white/[0.06] pt-4">
             <Stat label="Influence" value={pillar.impactWeight} />
-            <Stat label="Tech debt" value={String(pillar.techDebt)} />
-            <Stat label="Scalability" value={String(pillar.scalability)} />
+            <Stat label="Tech debt" value={String(animDebt)} />
+            <Stat label="Scalability" value={String(animScale)} />
           </div>
         </div>
 
@@ -65,14 +73,14 @@ export function PillarHeroBlock({ pillar }: { pillar: PillarMeta }) {
 
         <div className="flex flex-col items-center gap-6">
           <ViabilityGauge
-            score={pillar.score}
+            score={animScore}
             size="md"
             label="Pillar score"
             caption={pillar.summaryLine}
           />
           <DebtScalabilityTension
-            techDebt={pillar.techDebt}
-            scalability={pillar.scalability}
+            techDebt={animDebt}
+            scalability={animScale}
             className="w-full"
           />
         </div>

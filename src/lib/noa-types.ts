@@ -50,3 +50,12 @@ export interface MetricCard {
   value: string;
   series: number[];
 }
+
+/** Demo pillar overview — findings severity snapshot (may diverge from feed after reroll). */
+export interface SeveritySnap {
+  red: number;
+  yellow: number;
+  green: number;
+  analyst: number;
+  total: number;
+}

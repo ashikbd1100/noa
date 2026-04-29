@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import type { PillarMeta } from "@/lib/noa-types";
-import { TARGET_COMPANY } from "@/lib/noa-data";
+import { AnimatedDigits } from "@/components/noa/noa-demo-motion";
 import { BandBadge } from "@/components/noa/band-badge";
+import { TARGET_COMPANY } from "@/lib/noa-data";
+import type { PillarMeta } from "@/lib/noa-types";
+import { cn } from "@/lib/utils";
 
 export function PillarStickyHeader({
   pillar,
@@ -32,8 +35,8 @@ export function PillarStickyHeader({
                 / Pillar score
               </span>
               <span className="noa-display noa-tnum text-base font-semibold text-foreground">
-                {pillar.score}
-                <span className="noa-mono text-[10px] font-medium text-muted-foreground">
+                <AnimatedDigits value={pillar.score} />
+                <span className="noa-mono ml-0.5 text-[10px] font-medium text-muted-foreground">
                   /100
                 </span>
               </span>
@@ -72,7 +75,9 @@ export function PillarStickyHeader({
                     )}
                   />
                   <span>{p.shortLabel}</span>
-                  <span className="noa-tnum text-foreground">{p.score}</span>
+                  <span className="noa-tnum text-foreground">
+                    <AnimatedDigits value={p.score} />
+                  </span>
                 </Link>
               );
             })}

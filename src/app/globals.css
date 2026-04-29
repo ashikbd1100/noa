@@ -120,6 +120,9 @@
   --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.62 0.22 290);
 
+  /* Demo accent sentinel — duration matches `.noa-accent-frame-ring` sweep */
+  --noa-accent-cycle: 20s;
+
   /* Severity (R/Y/G) — used ONLY for scoring/severity */
   --noa-severity-red: oklch(0.65 0.22 25);
   --noa-severity-yellow: oklch(0.84 0.16 95);
@@ -248,6 +251,50 @@
   }
 }
 
+/* Animated accent ring — sweep angle only (no rotating rect / corner leaks). */
+@property --noa-accent-sweep-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Accent frame — periodic border sweep (~3.4s pass every 20s), inner panel unchanged */
+@keyframes noa-accent-ring-angle {
+  0%,
+  79% {
+    --noa-accent-sweep-angle: 0deg;
+  }
+  96% {
+    --noa-accent-sweep-angle: 360deg;
+  }
+  100% {
+    --noa-accent-sweep-angle: 360deg;
+  }
+}
+
+@keyframes noa-accent-ring-show {
+  0%,
+  77%,
+  98%,
+  100% {
+    opacity: 0;
+  }
+  80%,
+  95.5% {
+    opacity: 1;
+  }
+}
+
+/* Sentinel-only rotation — invisible; duration must match `--noa-accent-cycle` for reroll sync. */
+@keyframes noa-accent-demo-tick {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @layer utilities {
   /* Typography helpers */
   .noa-display {
@@ -314,6 +361,58 @@
     box-shadow:
       inset 0 1px 0 oklch(1 0 0 / 0.06),
       inset 0 0 0 1px oklch(1 0 0 / 0.02);
+  }
+  /* 1px glass-edge frame + periodic sweep overlay on ::before only */
+  .noa-accent-frame-ring {
+    --noa-accent-cycle: 20s;
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.14) 0%,
+      oklch(1 0 0 / 0.065) 26%,
+      oklch(1 0 0 / 0.038) 58%,
+      oklch(1 0 0 / 0.032) 82%,
+      oklch(0.62 0.22 290 / 0.065) 100%
+    );
+  }
+  .noa-accent-frame-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--noa-accent-sweep-angle) at 50% 50%,
+      transparent 0deg,
+      transparent 200deg,
+      oklch(0.84 0.14 192 / 0.88) 222deg,
+      oklch(0.72 0.24 290 / 0.82) 246deg,
+      oklch(0.82 0.15 192 / 0.75) 268deg,
+      oklch(0.68 0.22 290 / 0.55) 288deg,
+      transparent 312deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    will-change: opacity;
+    animation:
+      noa-accent-ring-angle var(--noa-accent-cycle) linear infinite,
+      noa-accent-ring-show var(--noa-accent-cycle) ease-in-out infinite;
+  }
+  .noa-accent-demo-sentinel {
+    animation: noa-accent-demo-tick var(--noa-accent-cycle) linear infinite;
+  }
+  .noa-accent-frame-ring > * {
+    position: relative;
+    z-index: 1;
   }
   .noa-row-hover {
     transition: background-color 200ms ease, border-color 200ms ease;
@@ -513,6 +612,13 @@
     .noa-motion-pulse,
     .noa-ribbon-path,
     .noa-ribbon-path-alt {
+      animation: none !important;
+    }
+    .noa-accent-frame-ring::before {
+      animation: none !important;
+      opacity: 0 !important;
+    }
+    .noa-accent-demo-sentinel {
       animation: none !important;
     }
   }
