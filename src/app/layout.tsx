@@ -35,9 +35,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${display.variable} ${sans.variable} ${mono.variable} h-full antialiased`}
+      className={`dark ${display.variable} ${sans.variable} ${mono.variable} min-h-dvh antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-black">
+      <body className="min-h-dvh bg-black">
         <TooltipProvider>
           <NoaShell>{children}</NoaShell>
         </TooltipProvider>
